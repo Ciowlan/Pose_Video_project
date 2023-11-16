@@ -315,8 +315,8 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
 //                                }
 //                            }
 
-                                Log.d("TAG", count_data.toString())
-                                Log.d("TAG", "標準")
+//                                Log.d("TAG", count_data.toString())
+//                                Log.d("TAG", "標準")
 
 
                         }catch (e:Exception){
