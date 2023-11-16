@@ -146,6 +146,8 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
     }
 
     fun clickPlayStop() {
+        // 在播放新视频之前清除 CSV 文件内容
+        clearCsvFile()
 
         if (mPlayTask != null) {
 
@@ -187,6 +189,19 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
 
     }
 
+    private fun clearCsvFile() {
+        // 清除 CSV 文件内容
+        val csvFilePath = applicationContext.filesDir.absolutePath + File.separator + "pose_data.csv"
+        try {
+            val writer = BufferedWriter(FileWriter(csvFilePath, false))
+            writer.write("")  // 写入空字符串以清空文件内容
+            writer.close()
+        } catch (e: Exception) {
+            Log.e("TAG", "清除CSV文件时出错：${e.message}")
+            e.printStackTrace()
+        }
+    }
+
     private fun adjustAspectRatio(videoWidth: Int, videoHeight: Int) {
         val viewWidth = mTextureView.width
         val viewHeight = mTextureView.height
@@ -219,6 +234,7 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
         TODO("Not yet implemented")
     }
 
+    var count_data = 0
     override fun onSurfaceTextureUpdated(surface: SurfaceTexture) {
 
 
@@ -226,8 +242,9 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
 
         val bm = mTextureView.bitmap
 
-        val allpose = arrayOf(PoseLandmark.LEFT_SHOULDER,PoseLandmark.LEFT_HIP,PoseLandmark.LEFT_KNEE,PoseLandmark.LEFT_ANKLE)
+//        val allpose = arrayOf(PoseLandmark.LEFT_SHOULDER,PoseLandmark.LEFT_HIP,PoseLandmark.LEFT_KNEE,PoseLandmark.LEFT_ANKLE)
             //arrayOf("LEFT_KNEE","LEFT_SHOULDER","LEFT_HIP","LEFT_ANKLE")
+        val allpose = arrayOf(PoseLandmark.LEFT_KNEE,PoseLandmark.LEFT_HIP,PoseLandmark.LEFT_ANKLE)
 
         if (bm != null) {
             Log.d("LOG:", "not null")
@@ -247,25 +264,60 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
                             val writer = BufferedWriter(FileWriter(csvFilePath, true))
 
                             val rowData = mutableListOf<String>()
+                            val angleData = mutableListOf<Double>()
 
                             for (i in allpose.indices){
                                 if (pose.getPoseLandmark(allpose[i]).position!=null){
 //                                    Log.d("TAG"+i,String.format(Locale.US, "%.2f", pose.getPoseLandmark(allpose[i]).position.x))
 //                                    Log.d("TAG"+i,String.format(Locale.US, "%.2f", pose.getPoseLandmark(allpose[i]).position.y))
 
-                                    rowData.add(String.format(Locale.US, "%.2f", pose.getPoseLandmark(allpose[i]).position.x))
-                                    rowData.add(String.format(Locale.US, "%.2f", pose.getPoseLandmark(allpose[i]).position.y))
+//                                    rowData.add(String.format(Locale.US, "%.2f", pose.getPoseLandmark(allpose[i]).position.x))
+//                                    rowData.add(String.format(Locale.US, "%.2f", pose.getPoseLandmark(allpose[i]).position.y))
+                                      val x = String.format(Locale.US, "%.2f", pose.getPoseLandmark(allpose[i]).position.x)
+                                      val y = String.format(Locale.US, "%.2f", pose.getPoseLandmark(allpose[i]).position.y)
+                                      angleData.add(x.toDouble())
+                                      angleData.add(y.toDouble())
+//                                      rowData.add(x)
+//                                      rowData.add(y)
                                     //textViewPoseInfo.text = String.format(Locale.US, "%.2f", pose.getPoseLandmark(PoseLandmark.LEFT_KNEE).position)
                                 }
                             }
+
+                            val angle = getIn_angle(angleData[0],angleData[1],angleData[2],angleData[3],angleData[4],angleData[5])
                             // 将rowData拼接为CSV格式的一行数据
-                            val csvRow = rowData.joinToString(separator = ",")
+//                            val csvRow = rowData.joinToString(separator = ",")
+                            val csvRow = angle.toString()
+
+                            var isStand = true
+                            var isSit = false
                             // 将CSV数据写入文件
                             writer.write(csvRow)
                             writer.newLine()
                             writer.close()
-                            Log.d("TAG", csvRow)
-                            Log.d("TAG", "CSV文件保存成功！")
+//                            Log.d("TAG", csvRow)
+                            Log.d("TAG", angle.toString())
+                            //Log.d("TAG", "CSV文件保存成功！")
+
+//                            if (isStand){ }else if (isSit){}
+//                            //angle 170站
+//                            //angle 150開始蹲
+//                                if (angle < 150){
+//                                    Log.d("TAG1", "再蹲低一點")
+//                                    isStand = false
+//                                    isSit = false
+//                                }
+//
+//                            else{
+//                                if(angle < 90){
+//                                    isSit = true
+//                                }else{
+//
+//                                }
+//                            }
+
+                                Log.d("TAG", count_data.toString())
+                                Log.d("TAG", "標準")
+
 
                         }catch (e:Exception){
                             Log.d("TAG",e.toString());
@@ -297,7 +349,11 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
 
     }
 
-
+    fun getIn_angle(x1: Double, x2: Double, y1: Double, y2: Double, z1: Double, z2: Double): Int {
+       val t = (y1-x1)*(z1-x1)+(y2-x2)*(z2-x2);
+       val result =(180*Math.acos(t/Math.sqrt((Math.abs((y1-x1)*(y1-x1))+Math.abs((y2-x2)*(y2-x2))) *(Math.abs((z1-x1)*(z1-x1))+Math.abs((z2-x2)*(z2-x2)))))/Math.PI).toInt()
+       return result
+    }
 
 
 }
