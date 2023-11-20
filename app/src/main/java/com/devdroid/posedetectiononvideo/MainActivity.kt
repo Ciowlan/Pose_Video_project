@@ -14,6 +14,7 @@ import android.os.Environment
 import android.util.Log
 import android.view.Surface
 import android.view.TextureView.SurfaceTextureListener
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -39,6 +40,7 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
     private var mPlayTask: MoviePlayer.PlayTask? = null
     private lateinit var uri: Uri
     private var mSurfaceTextureReady = false
+    private lateinit var textView :TextView
 
     companion object {
         private const val CAMERA_PERMISSION_CODE = 100
@@ -49,6 +51,7 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
         btnSelectFile?.setOnClickListener {
             val intent = Intent()
             intent.type = "video/*"
@@ -58,6 +61,8 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 STORAGE_PERMISSION_CODE
             )
+
+
         }
 
 
@@ -74,6 +79,9 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
             .build()
 
         poseDetector = PoseDetection.getClient(options)
+
+        textView = findViewById<TextView>(R.id.Text)
+
     }
 
     private fun checkPermission(permission: String, requestCode: Int) {
@@ -123,7 +131,6 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
                 val mediaMetadataRetriever = MediaMetadataRetriever()
                 mediaMetadataRetriever.setDataSource(applicationContext,uri)
                 imgView.setImageBitmap(mediaMetadataRetriever.getFrameAtIndex(0))
-
             }
         }
     }
@@ -145,7 +152,7 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
         mPlayTask?.requestStop()
     }
 
-    fun clickPlayStop() {
+    private fun clickPlayStop() {
         // 在播放新视频之前清除 CSV 文件内容
         clearCsvFile()
 
@@ -153,6 +160,7 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
 
             return
         }
+
 
         val callback = SpeedControlCallback()
         /*if (((CheckBox) findViewById(R.id.locked60fps_checkbox)).isChecked()) {
@@ -183,9 +191,7 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
             mPlayTask = MoviePlayer.PlayTask(player, this)
             mPlayTask!!.execute()
         }
-        else{
 
-        }
 
     }
 
@@ -200,6 +206,7 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
             Log.e("TAG", "清除CSV文件时出错：${e.message}")
             e.printStackTrace()
         }
+
     }
 
     private fun adjustAspectRatio(videoWidth: Int, videoHeight: Int) {
@@ -235,8 +242,12 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
     }
 
     var count_data = 0
+    var isSit : Boolean = false
     override fun onSurfaceTextureUpdated(surface: SurfaceTexture) {
 
+        runOnUiThread {
+            textView.text = "RED"
+        }
 
         Log.d("LOG:", "Here")
 
@@ -288,8 +299,8 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
 //                            val csvRow = rowData.joinToString(separator = ",")
                             val csvRow = angle.toString()
 
-                            var isStand = true
-                            var isSit = false
+
+
                             // 将CSV数据写入文件
                             writer.write(csvRow)
                             writer.newLine()
@@ -298,22 +309,42 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
                             Log.d("TAG", angle.toString())
                             //Log.d("TAG", "CSV文件保存成功！")
 
-//                            if (isStand){ }else if (isSit){}
-//                            //angle 170站
-//                            //angle 150開始蹲
-//                                if (angle < 150){
-//                                    Log.d("TAG1", "再蹲低一點")
-//                                    isStand = false
-//                                    isSit = false
-//                                }
-//
-//                            else{
-//                                if(angle < 90){
-//                                    isSit = true
-//                                }else{
-//
-//                                }
-//                            }
+
+                            //angle 170站
+                            //angle 120蹲
+
+                        if (angle in 71..179) {
+                            if (angle in 121..169) {
+                                textView.text = "RED"
+                                if (!isSit) {
+                                    Log.d("TAG1", "RED")
+                                } else {
+                                    Log.d("TAG1", "RED2")
+                                    isSit = false
+                                    count_data += 1
+                                    Log.d("count", count_data.toString())
+                                }
+                            } else if (angle in 96..120) {
+                                textView.text = "YEALLOW"
+                                if (!isSit) {
+                                    Log.d("TAG1", "YEALLOW")
+                                } else {
+                                    Log.d("TAG1", "YEALLOW2")
+                                }
+                            } else if (angle in 80..95) {
+                                textView.text = "GREEN"
+                                if (!isSit) {
+                                    Log.d("TAG1", "GREEN")
+                                    isSit = true
+                                } else {
+                                    Log.d("TAG1", "GREEN2")
+                                }
+                            }
+                        }
+                        else{
+                            Log.d("TAG1", "ERROR")
+                        }
+
 
 //                                Log.d("TAG", count_data.toString())
 //                                Log.d("TAG", "標準")
