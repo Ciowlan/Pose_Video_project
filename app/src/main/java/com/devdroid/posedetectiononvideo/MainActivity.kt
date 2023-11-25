@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
     private var mPlayTask: MoviePlayer.PlayTask? = null
     private lateinit var uri: Uri
     private var mSurfaceTextureReady = false
-    private lateinit var textView :TextView
+//    private lateinit var textView :TextView
 
     companion object {
         private const val CAMERA_PERMISSION_CODE = 100
@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
                 STORAGE_PERMISSION_CODE
             )
 
-            parentLayout.bringChildToFront(textView)
+//            parentLayout.bringChildToFront(textView)
             parentLayout.invalidate()
 
         }
@@ -86,7 +86,7 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
 
         poseDetector = PoseDetection.getClient(options)
 
-        textView = findViewById<TextView>(R.id.Text)
+//        textView = findViewById<TextView>(R.id.Text)
 
 
     }
@@ -322,7 +322,7 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
 
                         if (angle in 71..179) {
                             if (angle in 121..169) {
-                                textView.text = "RED"
+//                                textView.text = "RED"
                                 btnPlay.text = "RED"
                                 btnPlay.setBackgroundColor(Color.RED)
                                 if (!isSit) {
@@ -335,7 +335,7 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
                                     btnSelectFile.text = count_data.toString()
                                 }
                             } else if (angle in 96..120) {
-                                textView.text = "YEALLOW"
+//                                textView.text = "YEALLOW"
                                 btnPlay.text = "YEALLOW"
                                 btnPlay.setBackgroundColor(Color.YELLOW)
                                 if (!isSit) {
@@ -344,7 +344,7 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
                                     Log.d("TAG1", "YEALLOW2")
                                 }
                             } else if (angle in 80..95) {
-                                textView.text = "GREEN"
+//                                textView.text = "GREEN"
                                 btnPlay.text = "GREEN"
                                 btnPlay.setBackgroundColor(Color.GREEN)
                                 if (!isSit) {

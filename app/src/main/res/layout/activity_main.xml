@@ -32,17 +32,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/btnSelectFile"/>
-    <TextView
-        android:id="@+id/Text"
-        android:layout_width="135dp"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/btnPlay"
-        android:background="#000000"
-        android:gravity="center"
-        android:text="RED"
-        android:padding="4dp"
-        android:textColor="#FFFFFF"
-        android:textSize="34sp" />
+<!--    <TextView-->
+<!--        android:id="@+id/Text"-->
+<!--        android:layout_width="135dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_toRightOf="@id/btnPlay"-->
+<!--        android:background="#000000"-->
+<!--        android:gravity="center"-->
+<!--        android:text="RED"-->
+<!--        android:padding="4dp"-->
+<!--        android:textColor="#FFFFFF"-->
+<!--        android:textSize="34sp" />-->
 
 
 
