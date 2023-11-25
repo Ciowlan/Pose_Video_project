@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.graphics.Matrix
 import android.graphics.SurfaceTexture
 import android.media.MediaMetadataRetriever
@@ -62,15 +63,20 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
                 STORAGE_PERMISSION_CODE
             )
 
+            parentLayout.bringChildToFront(textView)
+            parentLayout.invalidate()
 
         }
-
-
 
         btnPlay.setOnClickListener {
 
             clickPlayStop()
+            btnPlay.text = "RED"
+            btnPlay.setBackgroundColor(Color.RED)
+            btnSelectFile.text = "0"
         }
+
+
 
         mTextureView.surfaceTextureListener = this
 
@@ -81,6 +87,7 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
         poseDetector = PoseDetection.getClient(options)
 
         textView = findViewById<TextView>(R.id.Text)
+
 
     }
 
@@ -131,6 +138,8 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
                 val mediaMetadataRetriever = MediaMetadataRetriever()
                 mediaMetadataRetriever.setDataSource(applicationContext,uri)
                 imgView.setImageBitmap(mediaMetadataRetriever.getFrameAtIndex(0))
+
+
             }
         }
     }
@@ -245,9 +254,6 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
     var isSit : Boolean = false
     override fun onSurfaceTextureUpdated(surface: SurfaceTexture) {
 
-        runOnUiThread {
-            textView.text = "RED"
-        }
 
         Log.d("LOG:", "Here")
 
@@ -269,6 +275,7 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
                         parentLayout.addView(draw)
 
                         val csvFilePath = applicationContext.filesDir.absolutePath + File.separator + "pose_data.csv"
+
 
 
                         try {
@@ -316,6 +323,8 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
                         if (angle in 71..179) {
                             if (angle in 121..169) {
                                 textView.text = "RED"
+                                btnPlay.text = "RED"
+                                btnPlay.setBackgroundColor(Color.RED)
                                 if (!isSit) {
                                     Log.d("TAG1", "RED")
                                 } else {
@@ -323,9 +332,12 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
                                     isSit = false
                                     count_data += 1
                                     Log.d("count", count_data.toString())
+                                    btnSelectFile.text = count_data.toString()
                                 }
                             } else if (angle in 96..120) {
                                 textView.text = "YEALLOW"
+                                btnPlay.text = "YEALLOW"
+                                btnPlay.setBackgroundColor(Color.YELLOW)
                                 if (!isSit) {
                                     Log.d("TAG1", "YEALLOW")
                                 } else {
@@ -333,6 +345,8 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
                                 }
                             } else if (angle in 80..95) {
                                 textView.text = "GREEN"
+                                btnPlay.text = "GREEN"
+                                btnPlay.setBackgroundColor(Color.GREEN)
                                 if (!isSit) {
                                     Log.d("TAG1", "GREEN")
                                     isSit = true
@@ -343,6 +357,7 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
                         }
                         else{
                             Log.d("TAG1", "ERROR")
+                            btnPlay.text = "ERRROR"
                         }
 
 

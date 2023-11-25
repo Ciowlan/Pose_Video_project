@@ -7,15 +7,11 @@
     tools:context=".MainActivity" >
 
 
-
-
     <TextureView
         android:id="@+id/mTextureView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         />
-
-
 
     <ImageView
         android:scaleType="fitXY"
@@ -23,20 +19,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-
     <Button
-        android:layout_toRightOf="@id/btnSelectFile"
         android:id="@+id/btnPlay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@id/btnSelectFile"
+
         android:text="Play" />
+
     <Button
         android:text="Select"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/btnSelectFile"/>
-
     <TextView
         android:id="@+id/Text"
         android:layout_width="135dp"
@@ -45,8 +40,10 @@
         android:background="#000000"
         android:gravity="center"
         android:text="RED"
+        android:padding="4dp"
         android:textColor="#FFFFFF"
         android:textSize="34sp" />
+
 
 
 </RelativeLayout>

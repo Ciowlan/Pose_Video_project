@@ -39,6 +39,7 @@ class Draw(context: Context?, var pose: Pose) : View(context) {
         whitePaint.color = Color.WHITE
         whitePaint.textSize = 100f
 
+
     }
 
     @RequiresApi(Build.VERSION_CODES.R)

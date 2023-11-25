@@ -434,7 +434,6 @@ public class MoviePlayer {
         public PlayTask(MoviePlayer player, PlayerFeedback feedback) {
             mPlayer = player;
             mFeedback = feedback;
-
             mLocalHandler = new LocalHandler();
         }
 
