@@ -24,6 +24,8 @@ import android.os.Message;
 import android.util.Log;
 import android.view.Surface;
 
+import androidx.core.content.ContextCompat;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -483,6 +485,7 @@ public class MoviePlayer {
         public void run() {
             try {
                 mPlayer.play();
+                checkStop = false;
             } catch (IOException ioe) {
                 throw new RuntimeException(ioe);
             } finally {
@@ -491,22 +494,23 @@ public class MoviePlayer {
                     mStopped = true;
                     mStopLock.notifyAll();
                 }
-
+                checkStop = true;
                 // Send message through Handler so it runs on the right thread.
                 mLocalHandler.sendMessage(
                         mLocalHandler.obtainMessage(MSG_PLAY_STOPPED, mFeedback));
             }
         }
 
+        static boolean checkStop = false;
         private static class LocalHandler extends Handler {
             @Override
             public void handleMessage(Message msg) {
                 int what = msg.what;
-
                 switch (what) {
                     case MSG_PLAY_STOPPED:
                         PlayerFeedback fb = (PlayerFeedback) msg.obj;
                         fb.playbackStopped();
+                        Log.d("stop","stop");
                         break;
                     default:
                         throw new RuntimeException("Unknown msg " + what);

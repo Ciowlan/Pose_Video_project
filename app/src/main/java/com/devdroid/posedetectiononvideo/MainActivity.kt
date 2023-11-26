@@ -21,6 +21,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.devdroid.posedetectiononvideo.MoviePlayer.PlayTask.checkStop
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.pose.PoseDetection
 import com.google.mlkit.vision.pose.PoseDetector
@@ -42,7 +43,7 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
     private lateinit var uri: Uri
     private var mSurfaceTextureReady = false
 //    private lateinit var textView :TextView
-
+    private var checkvideo = false
     companion object {
         private const val CAMERA_PERMISSION_CODE = 100
         private const val STORAGE_PERMISSION_CODE = 101
@@ -54,6 +55,10 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
 
 
         btnSelectFile?.setOnClickListener {
+
+            if (mPlayTask != null) {
+                mPlayTask = null
+            }
             val intent = Intent()
             intent.type = "video/*"
             intent.action = Intent.ACTION_PICK
@@ -62,7 +67,8 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 STORAGE_PERMISSION_CODE
             )
-
+            checkvideo = true
+            checkStop = false
 //            parentLayout.bringChildToFront(textView)
             parentLayout.invalidate()
 
@@ -70,10 +76,18 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
 
         btnPlay.setOnClickListener {
 
-            clickPlayStop()
-            btnPlay.text = "RED"
-            btnPlay.setBackgroundColor(Color.RED)
-            btnSelectFile.text = "0"
+            if (checkvideo) {
+                clickPlayStop()
+                btnPlay.text = "RED"
+                btnPlay.setBackgroundColor(Color.RED)
+                btnPlay.setTextColor(Color.WHITE)
+                btnSelectFile.text = "0"
+                count_data = 0
+                checkvideo = false
+            }
+            else{
+                Toast.makeText(this@MainActivity, "尚未選擇要撥放的影片", Toast.LENGTH_SHORT).show()
+            }
         }
 
 
@@ -142,6 +156,7 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
 
             }
         }
+
     }
 
     override fun onPause() {
@@ -316,50 +331,56 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
                             Log.d("TAG", angle.toString())
                             //Log.d("TAG", "CSV文件保存成功！")
 
+                            if(checkStop){
+                                btnPlay.text = "Finish/Play"
+                                btnPlay.setBackgroundColor(ContextCompat.getColor(this, R.color.myColor))
+                                btnSelectFile.text = "NEXT/"+count_data.toString()
+                            }else {
 
-                            //angle 170站
-                            //angle 120蹲
+                                //angle 170站
+                                //angle 120蹲
 
-                        if (angle in 71..179) {
-                            if (angle in 121..169) {
+                                if (angle in 71..179) {
+                                    if (angle in 121..169) {
 //                                textView.text = "RED"
-                                btnPlay.text = "RED"
-                                btnPlay.setBackgroundColor(Color.RED)
-                                if (!isSit) {
-                                    Log.d("TAG1", "RED")
-                                } else {
-                                    Log.d("TAG1", "RED2")
-                                    isSit = false
-                                    count_data += 1
-                                    Log.d("count", count_data.toString())
-                                    btnSelectFile.text = count_data.toString()
-                                }
-                            } else if (angle in 96..120) {
+                                        btnPlay.text = "RED"
+                                        btnPlay.setBackgroundColor(Color.RED)
+                                        if (!isSit) {
+                                            Log.d("TAG1", "RED")
+                                        } else {
+                                            Log.d("TAG1", "RED2")
+                                            isSit = false
+                                            count_data += 1
+                                            Log.d("count", count_data.toString())
+                                            btnSelectFile.text = count_data.toString()
+                                        }
+                                    } else if (angle in 96..120) {
 //                                textView.text = "YEALLOW"
-                                btnPlay.text = "YEALLOW"
-                                btnPlay.setBackgroundColor(Color.YELLOW)
-                                if (!isSit) {
-                                    Log.d("TAG1", "YEALLOW")
-                                } else {
-                                    Log.d("TAG1", "YEALLOW2")
-                                }
-                            } else if (angle in 80..95) {
+                                        btnPlay.text = "YEALLOW"
+                                        btnPlay.setBackgroundColor(Color.YELLOW)
+                                        if (!isSit) {
+                                            Log.d("TAG1", "YEALLOW")
+                                        } else {
+                                            Log.d("TAG1", "YEALLOW2")
+                                        }
+                                    } else if (angle in 80..95) {
 //                                textView.text = "GREEN"
-                                btnPlay.text = "GREEN"
-                                btnPlay.setBackgroundColor(Color.GREEN)
-                                if (!isSit) {
-                                    Log.d("TAG1", "GREEN")
-                                    isSit = true
+                                        btnPlay.text = "GREEN"
+                                        btnPlay.setBackgroundColor(Color.GREEN)
+                                        if (!isSit) {
+                                            Log.d("TAG1", "GREEN")
+                                            isSit = true
+                                        } else {
+                                            Log.d("TAG1", "GREEN2")
+                                        }
+                                    }
                                 } else {
-                                    Log.d("TAG1", "GREEN2")
+                                    Log.d("TAG1", "ERROR")
+                                    btnPlay.setBackgroundColor(Color.RED)
+                                    btnPlay.text = "ERRROR"
+                                    isSit = false
                                 }
                             }
-                        }
-                        else{
-                            Log.d("TAG1", "ERROR")
-                            btnPlay.text = "ERRROR"
-                        }
-
 
 //                                Log.d("TAG", count_data.toString())
 //                                Log.d("TAG", "標準")
