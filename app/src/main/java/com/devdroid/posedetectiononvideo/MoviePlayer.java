@@ -23,9 +23,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.Surface;
-
-import androidx.core.content.ContextCompat;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
