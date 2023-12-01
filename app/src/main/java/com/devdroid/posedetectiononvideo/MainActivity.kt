@@ -78,7 +78,7 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
 
             if (checkvideo) {
                 clickPlayStop()
-                btnPlay.text = "RED"
+                btnPlay.text = "開始"
                 btnPlay.setBackgroundColor(Color.RED)
                 btnPlay.setTextColor(Color.WHITE)
                 btnSelectFile.text = "0"
@@ -115,9 +115,7 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
         }
     }
 
-    // This function is called when the user accepts or decline the permission.
-    // Request Code is used to check which permission called this function.
-    // This request code is provided when the user is prompt for permission.
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
@@ -161,12 +159,7 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
 
     override fun onPause() {
         super.onPause()
-        // We're not keeping track of the state in static fields, so we need to shut the
-        // playback down.  Ideally we'd preserve the state so that the player would continue
-        // after a device rotation.
-        //
-        // We want to be sure that the player won't continue to send frames after we pause,
-        // because we're tearing the view down.  So we wait for it to stop here.
+
         if (mPlayTask != null) {
             stopPlayback()
             mPlayTask!!.waitForStop()
@@ -343,7 +336,7 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
                                 if (angle in 71..179) {
                                     if (angle in 121..169) {
 //                                textView.text = "RED"
-                                        btnPlay.text = "RED"
+                                        btnPlay.text = "異常"
                                         btnPlay.setBackgroundColor(Color.RED)
                                         if (!isSit) {
                                             Log.d("TAG1", "RED")
@@ -356,8 +349,8 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
                                         }
                                     } else if (angle in 96..120) {
 //                                textView.text = "YEALLOW"
-                                        btnPlay.text = "YEALLOW"
-                                        btnPlay.setBackgroundColor(Color.YELLOW)
+                                        btnPlay.text = "未達標"
+                                        btnPlay.setBackgroundColor(ContextCompat.getColor(this, R.color.myColor2))
                                         if (!isSit) {
                                             Log.d("TAG1", "YEALLOW")
                                         } else {
@@ -365,7 +358,7 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
                                         }
                                     } else if (angle in 80..95) {
 //                                textView.text = "GREEN"
-                                        btnPlay.text = "GREEN"
+                                        btnPlay.text = "標準"
                                         btnPlay.setBackgroundColor(Color.GREEN)
                                         if (!isSit) {
                                             Log.d("TAG1", "GREEN")
@@ -377,7 +370,7 @@ class MainActivity : AppCompatActivity(), SurfaceTextureListener, MoviePlayer.Pl
                                 } else {
                                     Log.d("TAG1", "ERROR")
                                     btnPlay.setBackgroundColor(Color.RED)
-                                    btnPlay.text = "ERRROR"
+                                    btnPlay.text = "錯誤"
                                     isSit = false
                                 }
                             }

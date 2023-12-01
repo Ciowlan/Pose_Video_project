@@ -14,35 +14,27 @@
         />
 
     <ImageView
-        android:scaleType="fitXY"
         android:id="@+id/imgView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:scaleType="fitXY" />
 
     <Button
         android:id="@+id/btnPlay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
         android:layout_toRightOf="@id/btnSelectFile"
-
-        android:text="Play" />
+        android:text="Play"
+        android:textSize="20dp" />
 
     <Button
         android:text="Select"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="20dp"
         android:id="@+id/btnSelectFile"/>
-<!--    <TextView-->
-<!--        android:id="@+id/Text"-->
-<!--        android:layout_width="135dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_toRightOf="@id/btnPlay"-->
-<!--        android:background="#000000"-->
-<!--        android:gravity="center"-->
-<!--        android:text="RED"-->
-<!--        android:padding="4dp"-->
-<!--        android:textColor="#FFFFFF"-->
-<!--        android:textSize="34sp" />-->
+
 
 
 
